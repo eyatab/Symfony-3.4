@@ -8,94 +8,112 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\RestBundle\View\View;
-
+use FOS\RestBundle\Controller\Annotations as Rest;
 use projetBundle\Entity\Caisse;
 
+/**
+ * @Route("/api_v1/caisses")
+ */
 class CaisseController extends Controller
 {
-    
-    public function getCaissesAction(Request $request)
+    /**
+     * @Route("", name="get_all_caisses",methods={"GET"})
+     */
+    public function allAction(Request $request)
     {
-    
-    $caisses = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('projetBundle:Caisse')
-                ->findAll();
-      /*  @var $caisses Caisse[] */
-        $formatted = [];
+        $caisses = $this->get('doctrine.orm.entity_manager')->getRepository('projetBundle:Caisse')->findAll();
+
         foreach ($caisses as $caisse) {
             $formatted[] = [
                'id' => $caisse->getId(),
                'codeC' => $caisse->getCodeC(),
                'nomC' => $caisse->getNomC(),
                'etatC' => $caisse->getEtatC(),
-               'datecreation' => $caisse->getDatecreation(),
-            
+               'datecreaC' => $caisse->getDatecreation(),
                'compteC' => $caisse->getCompteC(),
                'montantC' => $caisse->getMontantC(),
             ];
         }
-
-        return new JsonResponse($formatted);
+         if(!$formatted)
+         {
+             return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+         }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$formatted]]);
     }
 
-    public function getCaissebyidAction(Request $request)
+    /**
+     * @Route("/{id}", name="get_caisse_by_id",methods={"GET"})
+     */
+    public function getByIdAction($id)
     {
-        $caisse = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('projetBundle:Caisse')
-                ->find($request->get('caisse_id'));
-        /* @var $caisse Caisse */
+        $repository = $this->getDoctrine()->getRepository(Caisse::class);
+        $caisse=$repository->find($id);
         if (empty($caisse)) {
-            return new JsonResponse(['message' => 'Caisse not found'], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
         }
         $formatted = [
             'id' => $caisse->getId(),
             'codeC' => $caisse->getCodeC(),
             'nomC' => $caisse->getNomC(),
             'etatC' => $caisse->getEtatC(),
-            'datecreation' => $caisse->getDatecreation(),
-            
+            'datecreaC' => $caisse->getDatecreation(),
+        
             'compteC' => $caisse->getCompteC(),
             'montantC' => $caisse->getMontantC(),
         ];
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$formatted]]);
 
-        return new JsonResponse($formatted);
     }
-    public function createcaisseAction(Request $request)
+    /**
+     * @Route("", name="add_caisse_by_id",methods={"POST"})
+     */
+    public function createAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-    
         $caisse = new Caisse();
-        $caisse->setCodeC($request->get('codeC'));
-        $caisse ->setNomC($request->get('nomC'));
-        $caisse->setEtatC($request->get('etatC'));
-        $caisse->setDateCreation(new \DateTime('@'.strtotime('now')) );
-        $caisse->setCompteC( $request->get('compteC'));
-        $caisse->setMontantC($request->get('montantC'));
-
-        //add to doctrine to so that it can be saved 
-        $em->persist($caisse);
-        
-        $em->flush();
-
-        return new Response('It\'s probably been saved');
-    }
-     
-    public function removecaisseAction(Request $request)
-    { 
+        $caisse->setCodeC($request->get('codeC'))
+               ->setNomC($request->get('nomC'))
+               ->setEtatC($request->get('etatC'))
+               ->setDateC( $request->get('datecreation'))  
+               ->setCompteC( $request->get('compteC'))
+               ->setMontantC($request->get('montantC'));
         $em = $this->get('doctrine.orm.entity_manager');
-
-        $caisse = $em->getRepository('projetBundle:Caisse')
-                    ->find($request->get('caisse_id'));
-        /* @var $caisse Caisse */
-        if ($caisse) {
-        $em->remove($caisse);
+        $em->persist($caisse);
         $em->flush();
-        return new Response('It\'s probably been deleted');
-    }
-    else {
-        return new Response('doesn\'t exist');
-    }}
 
+        if(!$em)
+        {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'mouchkel']], 400);
+        }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
+
+    }
+
+    /**
+     * @Route("/{id}", name="update_caisse_by_id",methods={"PUT"})
+     */
+    public function updateAction(Request $request,$id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Caisse::class);
+        $caisse=$repository->find($id);
+        if (empty($caisse)) {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        }
+        $caisse->setCodeC($request->get('codeC'))
+            ->setNomC($request->get('nomC'))
+            ->setEtatC($request->get('etatC'))
+            ->setDateC( $request->get('datecreation'))
+           
+            ->setCompteC( $request->get('compteC'))
+            ->setMontantC($request->get('montantC'));
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($caisse);
+        $em->flush();
+        if(!$em)
+        {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'mouchkel']], 400);
+        }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
+
+    }
 
 }
