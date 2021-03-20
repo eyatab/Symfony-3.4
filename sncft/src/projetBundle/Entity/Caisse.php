@@ -135,6 +135,12 @@ class Caisse
         return $this;
     }
 
+    public function setDateC($date)
+    {
+        $this->datecreaC= $date;
+
+        return $this;
+    }
     /**
      * Get etatC
      *
@@ -180,7 +186,7 @@ class Caisse
      *
      * @return Caisse
      */
-    public function setIdcreaC($datecreaC)
+    public function setIdcreaC($idcreaC)
     {
         $this->idcreaC= $idcreaC;
 
