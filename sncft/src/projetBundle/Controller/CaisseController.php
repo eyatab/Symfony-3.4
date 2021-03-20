@@ -8,18 +8,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
+
 use projetBundle\Entity\Caisse;
 
 class CaisseController extends Controller
 {
+    
     public function getCaissesAction(Request $request)
     {
-        $caisses = $this->get('doctrine.orm.entity_manager')
+    
+    $caisses = $this->get('doctrine.orm.entity_manager')
                 ->getRepository('projetBundle:Caisse')
                 ->findAll();
-        /* @var $caisses Caisse[] */
-
+      /*  @var $caisses Caisse[] */
         $formatted = [];
         foreach ($caisses as $caisse) {
             $formatted[] = [
@@ -27,8 +29,8 @@ class CaisseController extends Controller
                'codeC' => $caisse->getCodeC(),
                'nomC' => $caisse->getNomC(),
                'etatC' => $caisse->getEtatC(),
-               'datecreaC' => $caisse->getDatecreaC(),
-               'idcreaC' => $caisse->getIdcreaC(),
+               'datecreation' => $caisse->getDatecreation(),
+            
                'compteC' => $caisse->getCompteC(),
                'montantC' => $caisse->getMontantC(),
             ];
@@ -51,8 +53,8 @@ class CaisseController extends Controller
             'codeC' => $caisse->getCodeC(),
             'nomC' => $caisse->getNomC(),
             'etatC' => $caisse->getEtatC(),
-            'datecreaC' => $caisse->getDatecreaC(),
-            'idcreaC' => $caisse->getIdcreaC(),
+            'datecreation' => $caisse->getDatecreation(),
+            
             'compteC' => $caisse->getCompteC(),
             'montantC' => $caisse->getMontantC(),
         ];
@@ -61,24 +63,39 @@ class CaisseController extends Controller
     }
     public function createcaisseAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+    
         $caisse = new Caisse();
-        $caisse->setCodeC($request->get('codeC'))
-               ->setNomC($request->get('nomC'))
-               ->setEtatC($request->get('etatC'))
-               ->setDateC( $request->get('datecreaC'))
-               ->setIdcreaC( $request->get('idcreaC'))
-               ->setCompteC( $request->get('compteC'))
-               ->setMontantC($request->get('montantC'));
-        $em = $this->get('doctrine.orm.entity_manager');
+        $caisse->setCodeC($request->get('codeC'));
+        $caisse ->setNomC($request->get('nomC'));
+        $caisse->setEtatC($request->get('etatC'));
+        $caisse->setDateCreation(new \DateTime('@'.strtotime('now')) );
+        $caisse->setCompteC( $request->get('compteC'));
+        $caisse->setMontantC($request->get('montantC'));
+
+        //add to doctrine to so that it can be saved 
         $em->persist($caisse);
+        
         $em->flush();
 
-        return $caisse;
-         
-    
-       
+        return new Response('It\'s probably been saved');
     }
      
+    public function removecaisseAction(Request $request)
+    { 
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $caisse = $em->getRepository('projetBundle:Caisse')
+                    ->find($request->get('caisse_id'));
+        /* @var $caisse Caisse */
+        if ($caisse) {
+        $em->remove($caisse);
+        $em->flush();
+        return new Response('It\'s probably been deleted');
+    }
+    else {
+        return new Response('doesn\'t exist');
+    }}
 
 
 }

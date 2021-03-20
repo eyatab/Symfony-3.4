@@ -10,4 +10,5 @@ namespace projetBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    
 }

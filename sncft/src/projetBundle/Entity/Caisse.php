@@ -49,16 +49,11 @@ class Caisse
     private $etatC;
 
  /**
-     * @var string
-     * @ORM\Column(type="string")
+     * @var date
+     * @ORM\Column(type="date")
      */
-    private $datecreaC;
-     /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $idcreaC;
-
+    private $datecreation;
+   
 
 
 
@@ -85,7 +80,6 @@ class Caisse
 
         return $this;
     }
-
     /**
      * Get codeC
      *
@@ -148,54 +142,31 @@ class Caisse
 
 
 /**
-     * Set datecreaC
+     * Set datecreation
      *
-     * @param string $nomC
+     * @param Date $datecreation
      *
      * @return Caisse
      */
-    public function setDatecreaC($datecreaC)
+    public function setDatecreation($datecreation)
     {
-        $this->datecreaC= $datecreaC;
+        $this->datecreation= new \DateTime('@'.strtotime('now'));
 
         return $this;
     }
 
     /**
-     * Get datecreaC
+     * Get datecreation
      *
-     * @return string
+     * @return Date
      */
-    public function getDatecreaC()
+    public function getDatecreation()
     {
-        return $this->datecreaC;
+        return $this->datecreation;
     }
 
 
 
-/**
-     * Set idcreaC
-     *
-     * @param string $nomC
-     *
-     * @return Caisse
-     */
-    public function setIdcreaC($datecreaC)
-    {
-        $this->idcreaC= $idcreaC;
-
-        return $this;
-    }
-
-    /**
-     * Get idcreaC
-     *
-     * @return string
-     */
-    public function getIdcreaC()
-    {
-        return $this->idcreaC;
-    }
 
 
 

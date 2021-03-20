@@ -20,6 +20,10 @@ caisse_index1:
     defaults: { _controller: projetBundle:Caisse:getCaissebyid}
 
 caisse_index2:
-    path:     /caisse
+    path:     /caisse/
     defaults: { _controller: projetBundle:Caisse:createcaisse}
+    
+caisse_index3:
+    path:     /caisse1/{caisse_id}
+    defaults: { _controller: projetBundle:Caisse:removecaisse}
     

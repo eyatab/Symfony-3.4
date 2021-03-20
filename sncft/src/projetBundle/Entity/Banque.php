@@ -45,15 +45,11 @@ class Banque
     private $etat;
 
     /**
-     * @var string
-     * @ORM\Column(type="string")
+     * @var date
+     * @ORM\Column(type="date")
      */
-    private $datecreabq;
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $idcreabq;
+    private $datecreation;
+   
     /**
      * Get id
      *
@@ -113,56 +109,33 @@ class Banque
     }
 
     /**
-     * Set datecreabq
+     * Set datecreation
      *
-     * @param string $etat
+     * @param string $datecreation
      *
      * @return Banque
      */
-    public function setDatecreabq($datecreabq)
+    public function setDatecreation($datecreation)
     {
-        $this->datecreabq = $datecreabq;
+        $this->datecreation =new \DateTime('@'.strtotime('now'));;
 
         return $this;
     }
 
     /**
-     * Get datecreabq
+     * Get datecreation
      *
      * @return string
      */
-    public function getDatecreabq()
+    public function getDatecreation()
     {
-        return $this->datecreabq;
+        return $this->datecreation;
     }
 
 
 
 
-    /**
-     * Set idcreabq
-     *
-     * @param string $etat
-     *
-     * @return Banque
-     */
-    public function setIdcreabq($idcreabq)
-    {
-        $this->datecreabq = $datecreabq;
-
-        return $this;
-    }
-
-    /**
-     * Get idcreabq
-     *
-     * @return string
-     */
-    public function getIdcreabq()
-    {
-        return $this->idcreabq;
-    }
-
+    
 
 
 

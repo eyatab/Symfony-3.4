@@ -50,13 +50,9 @@ class User
      * @var string
      * @ORM\Column(type="string")
      */
-    private $profil;
+    private $role;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $username;
+    
 
 
     /**
@@ -72,15 +68,11 @@ class User
      */
     private $password;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=10)
-     */
-    private $idcrea;
+   
   
 /**
-     * @var string
-     * @ORM\Column(type="string", length=10)
+     * @var date
+     * @ORM\Column(type="date")
      */
     private $datecreation;
 
@@ -215,52 +207,30 @@ class User
     }
 
     /**
-     * Set profil
+     * Set role
      *
-     * @param string $profil
+     * @param string $role
      *
      * @return User
      */
-    public function setProfil($profil)
+    public function setRole($role)
     {
-        $this->profil = $profil;
+        $this->role = $role;
 
         return $this;
     }
 
     /**
-     * Get profil
+     * Get role
      *
      * @return string
      */
-    public function getProfil()
+    public function getRole()
     {
-        return $this->profil;
+        return $this->role;
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
+    
 
     /**
      * Set password
@@ -284,30 +254,6 @@ class User
     public function getPassword()
     {
         return $this->password;
-    }
-
-/**
-     * Set idcrea
-     *
-     * @param string $idcrea
-     *
-     * @return User
-     */
-    public function setIdcrea($idcrea)
-    {
-        $this->idcrea = $idcrea;
-
-        return $this;
-    }
-
-    /**
-     * Get idcrea
-     *
-     * @return string
-     */
-    public function getIdcrea()
-    {
-        return $this->idcrea;
     }
 
 
@@ -346,7 +292,7 @@ class User
      */
     public function setDatecreation($datecreation)
     {
-        $this->datecreation = $datecreation;
+        $this->datecreation = new \DateTime('@'.strtotime('now'));
 
         return $this;
     }
@@ -354,7 +300,7 @@ class User
     /**
      * Get datecreation
      *
-     * @return string
+     * @return date
      */
     public function getDatecreation()
     {
