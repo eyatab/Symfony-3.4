@@ -150,7 +150,7 @@ class Caisse
      */
     public function setDatecreation($datecreation)
     {
-        $this->datecreation= new \DateTime('@'.strtotime('now'));
+        $this->datecreation= new \DateTime();
 
         return $this;
     }

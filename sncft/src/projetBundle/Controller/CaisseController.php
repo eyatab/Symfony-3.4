@@ -1,7 +1,6 @@
 <?php
 
 namespace projetBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,7 +28,7 @@ class CaisseController extends Controller
                'codeC' => $caisse->getCodeC(),
                'nomC' => $caisse->getNomC(),
                'etatC' => $caisse->getEtatC(),
-               'datecreaC' => $caisse->getDatecreation(),
+               'datecreation' => $caisse->getDatecreation()->format('Y-m-d'),
                'compteC' => $caisse->getCompteC(),
                'montantC' => $caisse->getMontantC(),
             ];
@@ -56,7 +55,7 @@ class CaisseController extends Controller
             'codeC' => $caisse->getCodeC(),
             'nomC' => $caisse->getNomC(),
             'etatC' => $caisse->getEtatC(),
-            'datecreaC' => $caisse->getDatecreation(),
+            'datecreation' => $caisse->getDatecreation()->format('Y-m-d'),
         
             'compteC' => $caisse->getCompteC(),
             'montantC' => $caisse->getMontantC(),
@@ -73,7 +72,7 @@ class CaisseController extends Controller
         $caisse->setCodeC($request->get('codeC'))
                ->setNomC($request->get('nomC'))
                ->setEtatC($request->get('etatC'))
-               ->setDateC( $request->get('datecreation'))  
+               ->setDatecreation( $request->get('datecreation')) 
                ->setCompteC( $request->get('compteC'))
                ->setMontantC($request->get('montantC'));
         $em = $this->get('doctrine.orm.entity_manager');
@@ -82,7 +81,7 @@ class CaisseController extends Controller
 
         if(!$em)
         {
-            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'mouchkel']], 400);
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
         }
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
 
@@ -101,7 +100,7 @@ class CaisseController extends Controller
         $caisse->setCodeC($request->get('codeC'))
             ->setNomC($request->get('nomC'))
             ->setEtatC($request->get('etatC'))
-            ->setDateC( $request->get('datecreation'))
+            ->setDatecreation( $request->get('datecreation'))
            
             ->setCompteC( $request->get('compteC'))
             ->setMontantC($request->get('montantC'));
@@ -110,10 +109,30 @@ class CaisseController extends Controller
         $em->flush();
         if(!$em)
         {
-            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'mouchkel']], 400);
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
         }
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
 
     }
+  /**
+     * @Route("/{caisse_id}", name="delete_caisse",methods={"DELETE"})
+     */
+  
+    public function DeleteAction(Request $request)
+    { 
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $caisse = $em->getRepository('projetBundle:Caisse')
+                    ->find($request->get('caisse_id'));
+        /* @var $caisse Caisse */
+        if ($caisse) {
+        $em->remove($caisse);
+        $em->flush();
+        return new Response('It\'s probably been deleted');
+    }
+    else {
+        return new Response('doesn\'t exist');
+    }}
+
 
 }

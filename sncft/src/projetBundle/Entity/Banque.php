@@ -111,7 +111,7 @@ class Banque
     /**
      * Set datecreation
      *
-     * @param string $datecreation
+     * @param Date $datecreation
      *
      * @return Banque
      */
@@ -125,7 +125,7 @@ class Banque
     /**
      * Get datecreation
      *
-     * @return string
+     * @return Date
      */
     public function getDatecreation()
     {
