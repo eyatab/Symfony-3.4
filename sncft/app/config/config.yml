@@ -20,6 +20,8 @@ framework:
     csrf_protection: ~
     validation: { enable_annotations: true }
     #serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
@@ -31,8 +33,9 @@ framework:
     assets: ~
     php_errors:
         log: true
-    serializer: true
+
 # Twig Configuration
+
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
@@ -67,6 +70,20 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-sensio_framework_extra:
-   router:
-        annotations: false
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: projetBundle\Entity\User
+    from_email:
+        address: "testapp@testapp.com"
+        sender_name: "Test App"
+
+
+
+lexik_jwt_authentication:
+    secret_key:       '%kernel.project_dir%/config/jwt/private.pem' # required for token creation
+    public_key:       '%kernel.project_dir%/config/jwt/public.pem'  # required for token verification
+    pass_phrase:      13021458 # required for token creation, usage of an environment variable is recommended
+    token_ttl:        3600
+    
+

@@ -6,7 +6,15 @@ app:
     resource: '@projetBundle/Controller/'
     type: annotation
 
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    
 api:
     resource: '@projetBundle/Controller/'
     type: annotation
+
+
+
+api_login_check:
+    path: /api/login_check
 
