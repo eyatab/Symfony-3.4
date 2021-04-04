@@ -17,9 +17,164 @@ class User extends  BaseUser{
      */
     protected $id;
 
+       /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    protected $matricule;
+/**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    protected $nom;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    protected $prenom;
+
+   /**
+     * @var string
+     * @ORM\Column(type="string", length=8)
+     */
+    protected $tel;
+   
 
 
 
+
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
+  /**
+     * Set matricule
+     *
+     * @param string $matricule
+     *
+     * @return User
+     */
+    public function setMatricule($matricule)
+    {
+        $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    /**
+     * Get matricule
+     *
+     * @return string
+     */
+    public function getMatricule()
+    {
+        return $this->matricule;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return User
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+
+
+
+
+
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     *
+     * @return User
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set tel
+     *
+     * @param string $tel
+     *
+     * @return User
+     */
+    public function setTel($tel)
+    {
+        $this->tel = $tel;
+
+        return $this;
+    }
+
+    /**
+     * Get tel
+     *
+     * @return string
+     */
+    public function getTel()
+    {
+        return $this->tel;
+    }
+
+
+      /**
+     * Set etatU
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setEtatU($etatU)
+    {
+        $this->etatU = $etatU;
+
+        return $this;
+    }
+
+    /**
+     * Get etatU
+     *
+     * @return string
+     */
+    public function getEtatU()
+    {
+        return $this->etatU;
+    }
 
 
 

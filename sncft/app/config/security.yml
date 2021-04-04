@@ -3,7 +3,11 @@
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
+        projetBundle\Entity\User: bcrypt
 
+    
+    role_hierarchy:
+       ROLE_SUPER_ADMIN: [ROLE_USER,ROLE_ADMIN,ROLE_CAISSIER]
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -41,7 +45,14 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
                       
         main:
-            anonymous: ~
+            pattern: ^/
+            user_checker: security.user_checker
+            form_login:
+                provider: fos_userbundle
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:       true
+            anonymous:    true
 
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
