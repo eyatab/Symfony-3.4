@@ -2,6 +2,7 @@
 
 namespace projetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection; 
 /**
  * @ORM\Entity
  * @ORM\Table(name="banques")
@@ -20,27 +21,27 @@ class Banque
      * @var string
      * @ORM\Column(type="string",unique=true)
      */
-    private $codeB;
+    private $code;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $raisonSB;
+    private $raisonsb;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $codeComptableB;
+    private $codecomptable;
 /**
      * @var string
      * @ORM\Column(type="string")
      */
     private $rib;
 /**
-     * @var string
-     * @ORM\Column(type="string")
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
     private $etat;
 
@@ -61,33 +62,33 @@ class Banque
     }
 
     /**
-     * Set codeB
+     * Set code
      *
-     * @param string $codeB
+     * @param string $code
      *
      * @return Banque
      */
-    public function setCodeB($codeB)
+    public function setCode($code)
     {
-        $this->codeB = $codeB;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get codeB
+     * Get code
      *
      * @return string
      */
-    public function getCodeB()
+    public function getCode()
     {
-        return $this->codeB;
+        return $this->code;
     }
 
 /**
      * Set etat
      *
-     * @param string $etat
+     * @param bool $etat
      *
      * @return Banque
      */
@@ -101,7 +102,7 @@ class Banque
     /**
      * Get etat
      *
-     * @return string
+     * @return bool
      */
     public function getEtat()
     {
@@ -140,15 +141,15 @@ class Banque
 
 
     /**
-     * Set raisonSB
+     * Set raisonsb
      *
-     * @param string $raisonSB
+     * @param string $raisonsb
      *
      * @return Banque
      */
-    public function setRaisonSB($raisonSB)
+    public function setRaisonsb($raisonsb)
     {
-        $this->raisonSB = $raisonSB;
+        $this->raisonsb = $raisonsb;
 
         return $this;
     }
@@ -158,33 +159,33 @@ class Banque
      *
      * @return string
      */
-    public function getRaisonSB()
+    public function getRaisonsb()
     {
-        return $this->raisonSB;
+        return $this->raisonsb;
     }
 
     /**
-     * Set codeComptableB
+     * Set codecomptable
      *
-     * @param string $codeComptableB
+     * @param string $codecomptable
      *
      * @return Banque
      */
-    public function setCodeComptableB($codeComptableB)
+    public function setCodecomptable($codecomptable)
     {
-        $this->codeComptableB = $codeComptableB;
+        $this->codecomptable = $codecomptable;
 
         return $this;
     }
 
     /**
-     * Get codeComptableB
+     * Get codecomptable
      *
      * @return string
      */
-    public function getCodeComptableB()
+    public function getCodecomptable()
     {
-        return $this->codeComptableB;
+        return $this->codecomptable;
     }
 
     /**
@@ -209,6 +210,22 @@ class Banque
     public function getRib()
     {
         return $this->rib;
+    }
+
+
+
+
+
+
+    
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class,cascade={"persist", "remove"}, mappedBy="banque")
+     */
+
+    protected $operations; 
+    public function __construct()
+    {
+        $this->operations = new ArrayCollection();
     }
 }
 

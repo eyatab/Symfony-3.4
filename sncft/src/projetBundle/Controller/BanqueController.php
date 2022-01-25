@@ -5,10 +5,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use projetBundle\Entity\Banque;
+
 
 
 /**
@@ -26,9 +28,9 @@ class BanqueController extends Controller
         foreach ($banques as $banque) {
             $formatted[] = [
                'id' => $banque->getId(),
-               'codeB' => $banque->getCodeB(),
-               'raisonSB' => $banque->getRaisonSB(),
-               'codeComptableB' => $banque->getCodeComptableB(),
+               'code' => $banque->getCode(),
+               'raisonsb' => $banque->getRaisonsb(),
+               'codecomptable' => $banque->getCodecomptable(),
                'rib' => $banque->getRib(),
                'etat' => $banque->getEtat(),
                'datecreation' => $banque->getDatecreation()->format('Y-m-d'),
@@ -53,9 +55,9 @@ class BanqueController extends Controller
         }
         $formatted = [
             'id' => $banque->getId(),
-            'codeB' => $banque->getCodeB(),
-            'raisonSB' => $banque->getRaisonSB(),
-            'codeComptableB' => $banque->getCodeComptableB(),
+            'code' => $banque->getCode(),
+            'raisonsb' => $banque->getRaisonsb(),
+            'codecomptable' => $banque->getCodecomptable(),
             'rib' => $banque->getRib(),
             'etat' => $banque->getEtat(),
             'datecreation' => $banque->getDatecreation()->format('Y-m-d'),
@@ -64,10 +66,57 @@ class BanqueController extends Controller
 
     }
     
+/**
+     * @Route("/{id}", name="restore_banque_by_id",methods={"PUT"})
+     */
+    public function restoreAction(Request $request,$id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Banque::class);
+        $banque=$repository->find($id);
+        if (empty($banque)) {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        }
+        $etat=$banque->getEtat();
+        if ($etat ==true){
+            $banque->setEtat(false);
+            $etat1=$banque->getEtat();
+        }
+        else {
+        
+            $banque->setEtat(true);
+            $etat1=$banque->getEtat();
+        }
+        if (empty($banque)) {
+            $banque
+            ->setCode($request->get('code'))
+            ->setRaisonsb($request->get('raisonsb'))
+            ->setCodecomptable($request->get('codecomptable'))
+            ->setRib( $request->get('rib')) 
+            ->setEtat(!$etat1)
+            ->setDatecreation($request->get('datecreation'));
+      
+         return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        
+        }
+       
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($banque);
+        $em->flush();
+        if(!$em)
+        {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
+        }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$banque]]);
+
+    }
+
+
+
+
     /**
      * @Route("/{id}", name="update_banque_by_id",methods={"PUT"})
      */
-    public function updateAction(Request $request,$id)
+  /*  public function updateAction(Request $request,$id)
     {
         $repository = $this->getDoctrine()->getRepository(Banque::class);
         $banque=$repository->find($id);
@@ -90,19 +139,25 @@ class BanqueController extends Controller
         }
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$banque]]);
 
-    }
+    }*/
+
+
+
+
+
+
     /**
      * @Route("", name="add_banque_by_id",methods={"POST"})
      */
     public function createAction(Request $request)
     {
         $banque = new Banque();
-        $banque->setCodeB($request->get('codeB'))
-               ->setRaisonSB($request->get('raisonSB'))
-               ->setCodeComptableB($request->get('codeComptableB'))
+        $banque->setCode($request->get('code'))
+               ->setRaisonsb($request->get('raisonsb'))
+               ->setCodecomptable($request->get('codecomptable'))
                ->setRib( $request->get('rib')) 
-               ->setEtat( $request->get('etat'))
-               ->setDatecreation($request->get('datecreation'));
+               ->setEtat( true)
+               ->setDatecreation(new \DateTime('now'));
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($banque);
         $em->flush();

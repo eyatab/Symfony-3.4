@@ -151,31 +151,58 @@ class User extends  BaseUser{
         return $this->tel;
     }
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Caisse::class, inversedBy="users")
+     * @ORM\JoinColumn(name="caisse_id", referencedColumnName="id")
+     */
 
-      /**
-     * Set etatU
+    protected $caisse;
+     /**
+     * Set caisse
      *
-     * @param string $password
+     * @param $caisse
      *
      * @return User
      */
-    public function setEtatU($etatU)
+    public function setCaisseId($caisse=null)
     {
-        $this->etatU = $etatU;
+        $this->caisse = $caisse;
 
         return $this;
     }
 
     /**
-     * Get etatU
+     * Get caisse
      *
-     * @return string
+     * @return Caisse
      */
-    public function getEtatU()
+    public function getCaisseId()
     {
-        return $this->etatU;
+        return $this->caisse;
     }
 
 
 
+
+
+
+
+     /**
+     * @ORM\OneToMany(targetEntity=Operation::class,cascade={"persist", "remove"}, mappedBy="user")
+     */
+
+    protected $operations; 
+
+
+
+
+    /**
+     * @ORM\OneToMany(targetEntity=Arretcaisse::class,cascade={"persist", "remove"}, mappedBy="user")
+     */
+
+    protected $arretcaisses; 
+    
 }
+
+
+

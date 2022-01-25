@@ -2,6 +2,7 @@
 
 namespace projetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="caisses")
@@ -22,31 +23,31 @@ class Caisse
      * @var string
      * @ORM\Column(type="string",unique=true)
      */
-    private $codeC;
+    private $code;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $nomC;
+    private $nom;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $compteC;
+    private $compte;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $montantC;
+    private $montant;
 
  /**
-     * @var string
-     * @ORM\Column(type="string")
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
-    private $etatC;
+    private $etat;
 
  /**
      * @var date
@@ -68,80 +69,130 @@ class Caisse
     }
 
     /**
-     * Set codeC
+     * Set code
      *
-     * @param string $codeC
+     * @param string $code
      *
      * @return Caisse
      */
-    public function setCodeC($codeC)
+    public function setCode($code)
     {
-        $this->codeC = $codeC;
+        $this->code = $code;
 
         return $this;
     }
     /**
-     * Get codeC
+     * Get code
      *
      * @return string
      */
-    public function getCodeC()
+    public function getCode()
     {
-        return $this->codeC;
+        return $this->code;
     }
 
     /**
-     * Set nomC
+     * Set nom
      *
-     * @param string $nomC
+     * @param string $nom
      *
      * @return Caisse
      */
-    public function setNomC($nomC)
+    public function setNom($nom)
     {
-        $this->nomC = $nomC;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get nomC
+     * Get nom
      *
      * @return string
      */
-    public function getNomC()
+    public function getNom()
     {
-        return $this->nomC;
+        return $this->nom;
     }
 
 
 /**
-     * Set etatC
+     * Set etat
      *
-     * @param string $nomC
+     * @param bool etat
      *
      * @return Caisse
      */
-    public function setEtatC($etatC)
+    public function setEtat($etat)
     {
-        $this->etatC= $etatC;
+        $this->etat= $etat;
 
         return $this;
     }
 
     /**
-     * Get etatC
+     * Get etat
      *
-     * @return string
+     * @return bool
      */
-    public function getEtatC()
+    public function getEtat()
     {
-        return $this->etatC;
+        return $this->etat;
     }
 
 
 
-/**
+
+    
+    
+    /**
+     * Set compte
+     *
+     * @param string $compte
+     *
+     * @return Caisse
+     */
+    public function setCompte($compte)
+    {
+        $this->compte = $compte;
+
+        return $this;
+    }
+
+    /**
+     * Get compte
+     *
+     * @return string
+     */
+    public function getCompte()
+    {
+        return $this->compte;
+    }
+
+    /**
+     * Set montant
+     *
+     * @param string $montant
+     *
+     * @return Caisse
+     */
+    public function setMontant($montant)
+    {
+        $this->montant= $montant;
+
+        return $this;
+    }
+
+    /**
+     * Get montant
+     *
+     * @return string
+     */
+    public function getMontant()
+    {
+        return $this->montant;
+    }
+    /**
      * Set datecreation
      *
      * @param Date $datecreation
@@ -165,61 +216,18 @@ class Caisse
         return $this->datecreation;
     }
 
-
-
-
-
-
-
-
-
+    
 
     /**
-     * Set compteC
-     *
-     * @param string $compteC
-     *
-     * @return Caisse
+     * @ORM\OneToMany(targetEntity=User::class,cascade={"persist", "remove"}, mappedBy="caisse")
      */
-    public function setCompteC($compteC)
+
+    protected $users; 
+    public function __construct()
     {
-        $this->compteC = $compteC;
-
-        return $this;
     }
+     
 
-    /**
-     * Get compteC
-     *
-     * @return string
-     */
-    public function getCompteC()
-    {
-        return $this->compteC;
-    }
-
-    /**
-     * Set montantC
-     *
-     * @param string $montantC
-     *
-     * @return Caisse
-     */
-    public function setMontantC($montantC)
-    {
-        $this->montantC = $montantC;
-
-        return $this;
-    }
-
-    /**
-     * Get montantC
-     *
-     * @return string
-     */
-    public function getMontantC()
-    {
-        return $this->montantC;
-    }
 }
+
 

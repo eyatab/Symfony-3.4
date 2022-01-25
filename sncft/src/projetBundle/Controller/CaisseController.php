@@ -25,12 +25,12 @@ class CaisseController extends Controller
         foreach ($caisses as $caisse) {
             $formatted[] = [
                'id' => $caisse->getId(),
-               'codeC' => $caisse->getCodeC(),
-               'nomC' => $caisse->getNomC(),
-               'etatC' => $caisse->getEtatC(),
+               'code' => $caisse->getCode(),
+               'nom' => $caisse->getNom(),
+               'etat' => $caisse->getEtat(),
                'datecreation' => $caisse->getDatecreation()->format('Y-m-d'),
-               'compteC' => $caisse->getCompteC(),
-               'montantC' => $caisse->getMontantC(),
+               'compte' => $caisse->getCompte(),
+               'montant' => $caisse->getMontant(),
             ];
         }
          if(!$formatted)
@@ -52,13 +52,12 @@ class CaisseController extends Controller
         }
         $formatted = [
             'id' => $caisse->getId(),
-            'codeC' => $caisse->getCodeC(),
-            'nomC' => $caisse->getNomC(),
-            'etatC' => $caisse->getEtatC(),
+            'code' => $caisse->getCode(),
+            'nom' => $caisse->getNom(),
+            'etat' => $caisse->getEtat(),
             'datecreation' => $caisse->getDatecreation()->format('Y-m-d'),
-        
-            'compteC' => $caisse->getCompteC(),
-            'montantC' => $caisse->getMontantC(),
+            'compte' => $caisse->getCompte(),
+            'montant' => $caisse->getMontant(),
         ];
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$formatted]]);
 
@@ -69,12 +68,12 @@ class CaisseController extends Controller
     public function createAction(Request $request)
     {
         $caisse = new Caisse();
-        $caisse->setCodeC($request->get('codeC'))
-               ->setNomC($request->get('nomC'))
-               ->setEtatC($request->get('etatC'))
-               ->setDatecreation( $request->get('datecreation')) 
-               ->setCompteC( $request->get('compteC'))
-               ->setMontantC($request->get('montantC'));
+        $caisse->setCode($request->get('code'))
+               ->setNom($request->get('nom'))
+               ->setEtat(true)
+               ->setDatecreation(new \DateTime('now')) 
+               ->setCompte( $request->get('compte'))
+               ->setMontant($request->get('montant'));
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($caisse);
         $em->flush();
@@ -83,14 +82,61 @@ class CaisseController extends Controller
         {
             return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
         }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=> $caisse]]);
+
+    }
+
+/**
+     * @Route("/{id}", name="restore_caisse_by_id",methods={"PUT"})
+     */
+    public function restoreAction(Request $request,$id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Caisse::class);
+        $caisse=$repository->find($id);
+        if (empty($caisse)) {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        }
+        $etat1=$caisse->getEtat();
+       
+        if ($etat1 ==true){
+            $caisse->setEtat(false);
+            $etat2=$caisse->getEtat();
+        }
+        else {
+        
+            $caisse->setEtat(true);
+            $etat2=$caisse->getEtat();
+        }
+        if (empty($caisse)) {
+         $caisse
+         ->setCode($request->get('code'))
+         ->setNom($request->get('nom'))
+         ->setEtat(!$etat1)
+         ->setCompte( $request->get('compte'))
+         ->setMontant($request->get('montant'))
+         ->setDatecreation( $request->get('datecreation'));
+      
+         return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        
+        }
+       
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($caisse);
+        $em->flush();
+        if(!$em)
+        {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
+        }
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
 
     }
 
-    /**
+
+
+   /**
      * @Route("/{id}", name="update_caisse_by_id",methods={"PUT"})
      */
-    public function updateAction(Request $request,$id)
+  /*  public function updateAction(Request $request,$id)
     {
         $repository = $this->getDoctrine()->getRepository(Caisse::class);
         $caisse=$repository->find($id);
@@ -113,7 +159,7 @@ class CaisseController extends Controller
         }
         return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
 
-    }
+    }*/
   /**
      * @Route("/{caisse_id}", name="delete_caisse",methods={"DELETE"})
      */
@@ -133,6 +179,43 @@ class CaisseController extends Controller
     else {
         return new Response('doesn\'t exist');
     }}
+
+
+
+
+
+
+
+
+
+/*********change sum */
+
+/**
+     * @Route("/upmontant/{id}/{m}", name="change_caisse_montant",methods={"PUT"})
+     */
+    public function changeAction(Request $request,$id,$m)
+    {
+        $repository = $this->getDoctrine()->getRepository(Caisse::class);
+        $caisse=$repository->find($id);
+        if (empty($caisse)) {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'data not found']], 404);
+        }
+        
+         $caisse
+         
+         ->setMontant($m);
+       
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($caisse);
+        $em->flush();
+        if(!$em)
+        {
+            return new JsonResponse(['result' => ['success'=>'false','data'=>null,'message'=>'ERROR']], 400);
+        }
+        return new JsonResponse(['result' => ['success'=>'true','message'=>'success','data'=>$caisse]]);
+
+    }
+
 
 
 }
